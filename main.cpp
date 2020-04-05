@@ -21,5 +21,6 @@ int main(int argc,char *argv[])
     {
         cout<<"Invalid Input\n";
     }
+    FileOptions();
     return 0;
 }
