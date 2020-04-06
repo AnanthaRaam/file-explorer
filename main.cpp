@@ -1,13 +1,13 @@
 #include"headers.h"
-char *root;
 using namespace std;
+char *root;
 int main(int argc,char *argv[])
 {
     string s;
     char *dir_name=NULL;
     if(argc==1)
     {
-        s = ".";
+        s = getcwd(NULL,0);
         dir_name = new char[s.length()+1];
         strcpy(dir_name,s.c_str());
         root=dir_name;
