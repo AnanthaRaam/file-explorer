@@ -2,52 +2,74 @@
 
 vector<string> dir_ent;
 int tot_file;
-
-int directorylist(const char *path)
+int directorylist(const char *dir_name=NULL)
 {
     int count = 0;
 	dir_ent.clear();
-	DIR *d;
-	struct dirent *dir;
-	d = opendir(path);
-	if (d)
+	DIR *dir=NULL;
+	//cout<<dir_name;
+	struct dirent *entry=NULL;
+	dir_ent.resize(0);
+	dir = opendir(dir_name);
+	if(!dir)
 	{
-		while ((dir = readdir(d)) != NULL)
-		{
-			if (!((string(dir->d_name) == "..") && (strcmp(path, root) == 0)))
-			{
-                dir_ent.push_back(string(dir->d_name));
-				count++;
-			}
-		}
-		closedir(d);
+		cout<<"directory not found\n"<<dir_name<<endl;
+	//	printf(stderr,"cant open  the directory\n");
+		return 0;
 	}
 	else
 	{
-		cout<<"no diectory found\n";
+		entry = readdir(dir);
+		while(entry != NULL)
+		{
+			if (entry->d_name[0]!='.')
+			{
+				//string path=string(dir_name)+"/"+string(entry->d_name);
+				// string path=string(entry->d_name);
+				string path=string(dir_name)+"/"+string(entry->d_name);
+				dir_ent.push_back(string(path));
+				count++;
+			}
+			entry = readdir(dir);
+		}
 	}
+	closedir(dir);
 	return count;
 }
 
-void ExploreDirectory(const char *dir_name)
+// int is_regular_file(const char *path)
+// {
+//     struct stat path_stat;
+//     stat(path, &path_stat);
+//     return S_ISREG(path_stat.st_mode);
+// }
+
+void ExploreDirectory(const char *dir_name=NULL)
 {
-    DIR *dir;
-    dir=opendir(dir_name);
-    struct dirent *entry;
-    printf("\033[H\033[J");
-	printf("%c[%d;%dH", 27, 1, 1);
-    tot_file=directorylist(dir_name);
-    if(!dir)
-    {
-        cout<<"directory not found\n";
-        return;
-    }
+    clrscr();
+	struct stat info;
+	tot_file=directorylist(dir_name);
     for(int i=0;i<tot_file;i++)
 	{
-		char *t = new char[dir_ent[i].length() + 1];
-		strcpy(t, dir_ent[i].c_str());
-		cout<<t<<"\n";
+		 string t = dir_ent[i];
+		//strcpy(t, dir_ent[i].c_str());
+		stat(t.c_str(),&info);
+        if(S_ISDIR(info.st_mode)){
+               std::cout << GREEN <<t<< RESET << std::endl;
+			    //explore((char*)path.c_str());
+		}
+		else{
+			std::cout<<RED<<t<<RESET<<std::endl;
+		}
+		// if (dir_ent[i].find(".") != std::string::npos)
+		// {
+    	// 	std::cout << RED <<t<< RESET << std::endl;
+		// }
+		// else
+		// {
+		// 	std::cout<<GREEN<<t<<RESET<<std::endl;
+		// }
+		
 	}
-    //printf("%c[%d;%dH", 27, 1, 80);
-    closedir(dir);
+
 }
