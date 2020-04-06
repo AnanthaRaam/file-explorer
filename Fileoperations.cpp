@@ -1,7 +1,8 @@
 #include"headers.h"
+using namespace std;
 
-//int tot_file;
 int curr_x=1;
+vector<string> dir_ent;
 
 void clrscr()
 {
@@ -35,13 +36,11 @@ void FileOptions()
 			if(ch=='w')		//up arrow
 			{
 				curr_x--;
-				//cout<<curr_x;
 				if(curr_x<1)
 				{
 					curr_x=1;
 				}
 				gotoxy(curr_x,1);
-				//cout<<"w";
 			}
 			else if(ch=='s') //down arrow
 			{
@@ -51,27 +50,38 @@ void FileOptions()
 					curr_x=tot_file;
 				}
 				gotoxy(curr_x,1);
-				//cout<<"s";
 			}
-			else if(int(ch)==10)
+			else if(int(ch)==10)	//enter key
 			{
-				//cout<<curr_x;
-				//getchar();
 				string temp=dir_ent[curr_x-1];;
-				// cout<<temp<<endl;
-				// clrscr();
-				// temp=temp.substr(1,temp.length());
-				// cout<<temp<<endl;
 				ExploreDirectory(temp.c_str());
 				curr_x=1;
 				gotoxy(curr_x,1);
-				//cout<<"enter\n";
+			}
+			else if(ch==0x7f)
+			{
+				clrscr();
+				//cout<<"backspace entered\n";
+				//struct stat info;
+				string str=dir_ent[curr_x-1];
+				
+				str=str.substr(0,str.find_last_of("//"));
+				str=str.substr(0,str.find_last_of("//"));
+				if(str.empty())
+				{
+					ExploreDirectory("/");
+				}
+				else
+				{
+					ExploreDirectory(str.c_str());
+				}
+				curr_x=1;
+				gotoxy(curr_x,1);
 			}
 			else if(ch=='q')	//quit filemanager
 			{
 				clrscr();
 				break;
-				// cout<<"q";
 			}
 			
 		}
