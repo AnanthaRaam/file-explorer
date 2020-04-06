@@ -1,20 +1,20 @@
 #include"headers.h"
+using namespace std;
 
-vector<string> dir_ent;
+//vector<string> dir_ent;
 int tot_file;
 int directorylist(const char *dir_name=NULL)
 {
     int count = 0;
 	dir_ent.clear();
 	DIR *dir=NULL;
-	//cout<<dir_name;
 	struct dirent *entry=NULL;
+	string path;
 	dir_ent.resize(0);
 	dir = opendir(dir_name);
 	if(!dir)
 	{
 		cout<<"directory not found\n"<<dir_name<<endl;
-	//	printf(stderr,"cant open  the directory\n");
 		return 0;
 	}
 	else
@@ -24,11 +24,12 @@ int directorylist(const char *dir_name=NULL)
 		{
 			if (entry->d_name[0]!='.')
 			{
-				//string path=string(dir_name)+"/"+string(entry->d_name);
-				// string path=string(entry->d_name);
-				string path=string(dir_name)+"/"+string(entry->d_name);
-				dir_ent.push_back(string(path));
-				count++;
+					if(string(dir_name).compare("/")!=0)
+						 path=string(dir_name)+"/"+string(entry->d_name);
+					else
+						 path="/"+string(entry->d_name);
+					dir_ent.push_back(string(path));
+					count++;	
 			}
 			entry = readdir(dir);
 		}
@@ -37,13 +38,6 @@ int directorylist(const char *dir_name=NULL)
 	return count;
 }
 
-// int is_regular_file(const char *path)
-// {
-//     struct stat path_stat;
-//     stat(path, &path_stat);
-//     return S_ISREG(path_stat.st_mode);
-// }
-
 void ExploreDirectory(const char *dir_name=NULL)
 {
     clrscr();
@@ -51,24 +45,16 @@ void ExploreDirectory(const char *dir_name=NULL)
 	tot_file=directorylist(dir_name);
     for(int i=0;i<tot_file;i++)
 	{
-		 string t = dir_ent[i];
-		//strcpy(t, dir_ent[i].c_str());
+		string t = dir_ent[i];
 		stat(t.c_str(),&info);
-        if(S_ISDIR(info.st_mode)){
-               std::cout << GREEN <<t<< RESET << std::endl;
-			    //explore((char*)path.c_str());
+        if(S_ISDIR(info.st_mode))
+		{
+           cout<<GREEN<<t<<RESET<<endl;
 		}
-		else{
-			std::cout<<RED<<t<<RESET<<std::endl;
+		else
+		{
+			cout<<RED<<t<<RESET<<endl;
 		}
-		// if (dir_ent[i].find(".") != std::string::npos)
-		// {
-    	// 	std::cout << RED <<t<< RESET << std::endl;
-		// }
-		// else
-		// {
-		// 	std::cout<<GREEN<<t<<RESET<<std::endl;
-		// }
 		
 	}
 
