@@ -26,7 +26,7 @@ void FileOptions()
 		{
 			
 			ch=getchar();
-			if(ch=='w')		//up arrow
+			if(ch=='w')		//navigating upwards
 			{
 				curr_x--;
 				if(curr_x<1)
@@ -35,7 +35,7 @@ void FileOptions()
 				}
 				gotoxy(curr_x,1);
 			}
-			else if(ch=='s') //down arrow
+			else if(ch=='s') //navigating downwards
 			{
 				curr_x++;
 				if(curr_x>tot_file)
@@ -44,7 +44,7 @@ void FileOptions()
 				}
 				gotoxy(curr_x,1);
 			}
-			else if(int(ch)==10)	//enter key
+			else if(int(ch)==10)	//exploring the file upwards
 			{
 				struct stat stats;
 				string t = dir_ent[curr_x-1];
@@ -88,13 +88,12 @@ void FileOptions()
 				curr_x=1;
 				gotoxy(curr_x,1);
 			}
-			else if(ch==0x7f) 	//backspace entered
+			else if(ch==0x7f) 	//exploring the file backwards
 			{
 				clrscr();
 				//cout<<"backspace entered\n";
 				//struct stat info;
 				string str=dir_ent[curr_x-1];
-				
 				str=str.substr(0,str.find_last_of("//"));
 				str=str.substr(0,str.find_last_of("//"));
 				if(str.empty())
@@ -108,7 +107,7 @@ void FileOptions()
 				curr_x=1;
 				gotoxy(curr_x,1);
 			}
-			else if(ch=='>')
+			else if(ch=='>')	//rename a file
 			{
 				string oldname=dir_ent[curr_x-1];
 				gotoxy(tot_file+1,1);
@@ -135,8 +134,100 @@ void FileOptions()
 					curr_x=1;
 					gotoxy(curr_x,1);
 				}
+			}
+			else if(ch=='d')	//file deletion
+			{
+				string t=dir_ent[curr_x-1];
+				string temp=t.substr(0,t.find_last_of("//"));
+				char c;
+				gotoxy(tot_file+1,1);
+				cout<<"do you want to delete the selected file/folder[y/n]\n";
+				cin>>c;
+				if(c=='y')
+				{
+					if(!remove(t.c_str()))
+					{
+						cout<<"file deleted successfully\n";
+						getchar();
+					}
+					else
+					{
+						cout<<"operation unsuccessful\n";
+					}
+					ExploreDirectory(temp.c_str());
+					curr_x=1;
+					gotoxy(curr_x,1);
+				}
+				else
+				{
+					ExploreDirectory(t.substr(0,t.find_last_of("//")).c_str());
+					curr_x=1;
+					gotoxy(curr_x,1);
+				}
 				
-
+			}
+			else if(ch=='c')		//create a folder
+			{
+				char c;
+				gotoxy(tot_file+1,1);
+				string t;
+				string temp=dir_ent[curr_x-1];
+				cout<<"do you want to create a directory[y/n]\n";
+				cin>>c;
+				if(c=='y')
+				{
+					cout<<"enter the name of the directory to be created\n";
+					cin>>t;
+					t=temp.substr(0,temp.find_last_of("//"))+"/"+t;
+					if(mkdir(t.c_str(),0777)==-1)
+					{
+						cerr<<"error : "<<strerror(errno)<<endl;
+					}
+					else
+					{
+						//cout<<"directory created succesfully\n";
+						//cout<<"press any key to continue\n";
+						//getchar();
+						ExploreDirectory(temp.substr(0,temp.find_last_of("//")).c_str());
+						curr_x=1;
+						gotoxy(curr_x,1);
+						getchar();
+					}
+					
+				}
+				else
+				{
+					ExploreDirectory(temp.substr(0,temp.find_last_of("//")).c_str());
+					curr_x=1;
+					gotoxy(curr_x,1);
+				}
+			}
+			else if(ch=='f')	//creating file
+			{
+				gotoxy(tot_file+1,1);
+				string temp=dir_ent[curr_x-1];
+				char c;
+				string fname;
+				cout<<"do you want to create a file[y/n]\n";
+				cin>>c;
+				if(c=='y')
+				{
+					cout<<"enter the file name to be created(with extension) : ";
+					cin>>fname;
+					fname=temp.substr(0,temp.find_last_of("//"))+"/"+fname;
+					std::ofstream file { fname };
+					cout<<"file created successfully\n";
+					ExploreDirectory(temp.substr(0,temp.find_last_of("//")).c_str());
+					curr_x=1;
+					gotoxy(curr_x,1);
+					getchar();
+				}
+				else
+				{
+					ExploreDirectory(temp.substr(0,temp.find_last_of("//")).c_str());
+					curr_x=1;
+					gotoxy(curr_x,1);
+				}
 			}
 			else if(ch=='q')	//quit filemanager
 			{
