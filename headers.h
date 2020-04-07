@@ -14,7 +14,7 @@ using namespace std;
 #define RESET   "\033[0m"
 #define RED "\033[31m"
 #define GREEN "\033[32m"
-
+#define CYAN  "\x1B[36m"
 
 extern vector <string> dir_ent;
 extern char *root;
@@ -23,5 +23,6 @@ extern int tot_file;
 
 void ExploreDirectory(const char *dir_name);
 void FileOptions();
+void printFileProperties(struct stat stats);
 void clrscr();
 void gotoxy(int,int);
