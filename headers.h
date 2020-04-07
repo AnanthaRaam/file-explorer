@@ -1,3 +1,4 @@
+#include<fstream>
 #include<iostream>
 #include<string>
 #include<string.h>
@@ -7,6 +8,7 @@
 #include<unistd.h>
 #include<termios.h>
 #include<stdio.h>
+#include<cstdio>
 #include<vector>
 #include<stdlib.h>
 using namespace std;
