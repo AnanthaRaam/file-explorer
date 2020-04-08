@@ -12,6 +12,7 @@ int directorylist(const char *dir_name=NULL)
 	string path;
 	dir_ent.resize(0);
 	dir = opendir(dir_name);
+	root=string(dir_name)+"/";
 	if(!dir)
 	{
 		cout<<"directory not found\n"<<dir_name<<endl;
@@ -28,6 +29,7 @@ int directorylist(const char *dir_name=NULL)
 						 path=string(dir_name)+"/"+string(entry->d_name);
 					else
 						 path="/"+string(entry->d_name);
+					//root=path;
 					dir_ent.push_back(string(path));
 					count++;	
 			}
@@ -38,7 +40,7 @@ int directorylist(const char *dir_name=NULL)
 	return count;
 }
 
-void printFileProperties(struct stat stats)
+void PrintFileProperties(struct stat stats)
 {
 	clrscr();
     struct tm dt;
