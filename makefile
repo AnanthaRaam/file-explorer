@@ -1,5 +1,5 @@
-main: main.o DirectoryOperations.o extrautility.o FileExplorerOptions.o FileExploration.o NavigateContent.o RenameFile.o DeleteFile.o FileOperations.o
-	g++ main.o DirectoryOperations.o extrautility.o FileExplorerOptions.o FileExploration.o NavigateContent.o RenameFile.o DeleteFile.o FileOperations.o -o main
+main: main.o DirectoryOperations.o extrautility.o FileExplorerOptions.o FileExploration.o NavigateContent.o RenameFile.o DeleteFile.o FileOperations.o ApplicationViewer.o
+	g++ main.o DirectoryOperations.o extrautility.o FileExplorerOptions.o FileExploration.o NavigateContent.o RenameFile.o DeleteFile.o FileOperations.o ApplicationViewer.o -o main
 
 main.o: main.cpp
 	g++ -c main.cpp
@@ -27,3 +27,6 @@ DeleteFile.o: DeleteFile.cpp
 
 FileOperations.o: FileOperations.cpp
 	g++ -c FileOperations.cpp
+
+ApplicationViewer.o: ApplicationViewer.cpp
+	g++ -c ApplicationViewer.cpp

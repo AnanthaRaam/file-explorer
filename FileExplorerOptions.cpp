@@ -58,6 +58,10 @@ void FileExplorerOptions()
 			{
 				CreateFile();
 			}
+			else if(ch=='o')	//opening default application
+			{
+				ApplicationViewer();
+			}
 			else if(ch=='q')	//quit filemanager
 			{
 				clrscr();

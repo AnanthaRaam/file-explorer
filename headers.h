@@ -12,6 +12,7 @@
 #include<cstdio>
 #include<vector>
 #include<stdlib.h>
+#include<sys/wait.h>
 using namespace std;
 
 /* setting color properties */
@@ -64,6 +65,9 @@ void CreateFolder();
 
 /* create file */
 void CreateFile();
+
+/* application viewer */
+void ApplicationViewer();
 
 /* extrautility functions */
 void clrscr();
